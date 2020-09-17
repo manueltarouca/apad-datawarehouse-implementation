@@ -31,7 +31,7 @@ CREATE TABLE funcionario (
 	nome		 varchar(512),
 	datanascimento varchar(512),
 	sexo		 varchar(512),
-	funcao	 boolean,
+	funcao	 varchar(512),
 	contrato	 varchar(512),
 	especialidade	 varchar(512),
 	PRIMARY KEY(id)
