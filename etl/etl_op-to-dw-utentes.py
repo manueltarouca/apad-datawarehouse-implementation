@@ -26,13 +26,15 @@ try:
 						JOIN beneficio ON utentes.beneficio_id = beneficio.id;"""
         cursor_op.execute(sql_utentes)
         utentes = cursor_op.fetchall()
+        print(utentes)
         for utente in utentes:
             print(
                 "A integrar o registo do utente: [" + utente["nome"] + "]")
             with connection_dw_db.cursor() as cursor_dw:
                 # Create a new record
-                sql = "INSERT INTO utente (nome, datanascimento, sexo, peso, altura, vacinas, ocupacao, beneficio) VALUES (%s, %s, %s, %s, %s, %s)"
-                cursor_dw.execute(sql, ())
+                sql = "INSERT INTO utente (nome, datanascimento, sexo, peso, altura, vacinas, ocupacao, beneficio) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+                cursor_dw.execute(sql, (utente["nome"], utente["data_nascimento"], utente["sexo"], utente["peso"],
+                                        utente["altura"], utente["vacinas"], utente["ocupacao"], utente["beneficio"]))
                 connection_dw_db.commit()
 finally:
     connection_op_db.close()
