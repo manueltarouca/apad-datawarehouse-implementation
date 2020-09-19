@@ -43,20 +43,24 @@ try:
             tipo = cursor_dw.fetchone()
             print(tipo["id"])
             # Create a new record
-            data_atual = datetime.datetime.strptime(row["data_atual"], "%d/%m/%Y %H:%M")
-            data_marcacao = datetime.datetime.strptime(row["data_marcacao"], "%d/%m/%Y %H:%M")
+            data_atual = datetime.datetime.strptime(
+                row["data_atual"], "%d/%m/%Y %H:%M")
+            data_marcacao = datetime.datetime.strptime(
+                row["data_marcacao"], "%d/%m/%Y %H:%M")
             tempoespera = (data_atual-data_marcacao).days
-            #print(data_atual.date())
+            # print(data_atual.date())
             sql = "INSERT INTO data (dia, mes, ano, hora) VALUES (%s, %s, %s, %s)"
             cursor_dw.execute(
                 sql, (data_atual.date().day, data_atual.date().month, data_atual.date().year, data_atual.time().hour,))
             # Get data id
             data_id = cursor_dw.lastrowid
             connection_dw_db.commit()
+            print(pd.isnull(row["exame"]))
+            print(pd.isnull(row["farmaco"]))
             # Create a new record
             sql = """INSERT INTO consultas (duracao, tempoespera, credencial, prescricao, tipo_id, data_id, clinica_id, funcionario_id, utente_id, patologia_id)
 					VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-            cursor_dw.execute(sql, (row["duracao"], tempoespera, not  type(row["exame"]) == type(None), not  type(row["farmaco"]) == type(None),
+            cursor_dw.execute(sql, (row["duracao"], tempoespera, not(bool(pd.isnull(row["exame"]))), not(bool(pd.isnull(row["farmaco"]))),
                                     tipo["id"], data_id, clinica["id"], funcionario["id"], utente["id"], patologia["id"]))
             connection_dw_db.commit()
 finally:
